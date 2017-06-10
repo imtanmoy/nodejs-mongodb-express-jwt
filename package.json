@@ -1,0 +1,23 @@
+{
+    "name": "contact-book",
+    "version": "1.0.0",
+    "main": "server.js",
+    "author": "Tanmoy Banik",
+    "license": "MIT",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "body-parser": "^1.17.2",
+        "compression": "^1.6.2",
+        "express": "^4.15.3",
+        "express-validation": "^1.0.2",
+        "helmet": "^3.6.1",
+        "http-status": "^1.0.1",
+        "joi": "^10.5.2",
+        "mongoose": "^4.10.5"
+    },
+    "devDependencies": {
+        "morgan": "^1.8.2"
+    }
+}
