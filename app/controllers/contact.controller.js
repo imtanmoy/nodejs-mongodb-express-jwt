@@ -10,10 +10,6 @@ exports.index = async(req, res) => {
     } catch (error) {
         next(error);
     }
-
-    // res.status(HTTPStatus.OK).json({
-    //     message: "Contact Index Page"
-    // })
 }
 
 exports.create = async(req, res, next) => {
@@ -30,6 +26,7 @@ exports.update = (req, res) => {
     res.status(HTTPStatus.OK).json({
         message: "Contact Updated"
     })
+
 }
 
 exports.destroy = (req, res) => {
