@@ -1,7 +1,10 @@
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
-// const passportJWT = require("passport-jwt");
+const passportJWT = require("passport-jwt");
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require("../models/user.model");
+const { secreateKey } = require('../../config/config')
 
 // Local strategy
 const localOpts = {
@@ -26,6 +29,35 @@ const localStrategy = new LocalStrategy(
 );
 
 
+
+
+
+
+// Jwt strategy
+const jwtOpts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeader('authorization'),
+    secretOrKey: secreateKey,
+};
+
+
+const jwtStrategy = new JwtStrategy(jwtOpts, async(payload, done) => {
+    try {
+        const user = await User.findById(payload._id);
+
+        if (!user) {
+            return done(null, false);
+        }
+
+        return done(null, user);
+    } catch (e) {
+        return done(e, false);
+    }
+});
+
+
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 const authLocal = passport.authenticate('local', { session: false });
-module.exports = authLocal;
+const authJwt = passport.authenticate('jwt', { session: false });
+exports.authLocal = authLocal;
+exports.authJwt = authJwt;

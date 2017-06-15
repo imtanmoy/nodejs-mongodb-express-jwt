@@ -27,8 +27,8 @@ exports.signup = async(req, res, next) => {
 };
 
 exports.signin = (req, res, next) => {
-    res.status(200).json(req.user)
-    return next()
+    return res.status(200).json(req.user.toAuthJSON())
+        // return next()
 };
 
 exports.signout = (req, res) => {

@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const bcrypt = require('bcrypt-nodejs')
 const compareSync = bcrypt.compareSync
+const jwt = require('jsonwebtoken');
+const { secreateKey } = require('../../config/config')
 
 
 /**
@@ -56,11 +58,31 @@ UserSchema.pre('save', function(next) {
 
 UserSchema.methods = {
     hashPassword(password) {
-        return bcrypt.hashSync(password)
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
     },
     authenticateUser(password) {
         return compareSync(password, this.password);
-    }
+    },
+    createToken() {
+        return jwt.sign({
+            _id: this._id
+        }, secreateKey)
+    },
+    toAuthJSON() {
+        return {
+            _id: this._id,
+            name: `${this.firstName} ${this.lastName}`,
+            email: this.email,
+            token: `JWT ${this.createToken()}`
+        };
+    },
+    // toJSON() {
+    //     return {
+    //         _id: this._id,
+    //         email: this.email,
+    //         name: `${this.firstName} ${this.lastName}`
+    //     };
+    // }
 }
 
 

@@ -1,13 +1,14 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const { dbURL } = require('./config')
 
 mongoose.Promise = global.Promise;
 
 try {
-    mongoose.connect('mongodb://localhost/nodecontactbook');
+    mongoose.connect(dbURL);
 } catch (err) {
-    mongoose.createConnection('mongodb://localhost/nodecontactbook');
+    mongoose.createConnection(dbURL);
 }
 
 mongoose.connection
