@@ -1,14 +1,15 @@
 const passport = require("passport");
-const LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require("passport-local").Strategy;
 const passportJWT = require("passport-jwt");
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 const User = require("../models/user.model");
-const { secreateKey } = require('../../config/config')
+const { secreateKey } = require("../../config/config");
+const jwt = require("jsonwebtoken");
 
 // Local strategy
 const localOpts = {
-    usernameField: 'email'
+    usernameField: "email"
 };
 
 const localStrategy = new LocalStrategy(
@@ -28,17 +29,11 @@ const localStrategy = new LocalStrategy(
     }
 );
 
-
-
-
-
-
 // Jwt strategy
 const jwtOpts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeader('authorization'),
-    secretOrKey: secreateKey,
+    jwtFromRequest: ExtractJwt.fromAuthHeader("authorization"),
+    secretOrKey: secreateKey
 };
-
 
 const jwtStrategy = new JwtStrategy(jwtOpts, async(payload, done) => {
     try {
@@ -54,10 +49,33 @@ const jwtStrategy = new JwtStrategy(jwtOpts, async(payload, done) => {
     }
 });
 
-
 passport.use(localStrategy);
 passport.use(jwtStrategy);
-const authLocal = passport.authenticate('local', { session: false });
-const authJwt = passport.authenticate('jwt', { session: false });
+const authLocal = passport.authenticate("local", { session: false });
+const authJwt = passport.authenticate("jwt", { session: false });
 exports.authLocal = authLocal;
 exports.authJwt = authJwt;
+
+
+
+
+
+// get authenticated user from jwt token
+const getToken = (headers) => {
+    if (headers && headers.authorization) {
+        var parted = headers.authorization.split(" ");
+        if (parted.length === 2) {
+            return parted[1];
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+};
+
+exports.authUser = headers => {
+    let token = getToken(headers);
+    let decoded = jwt.decode(token, secreateKey);
+    return decoded;
+};

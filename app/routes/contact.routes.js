@@ -7,7 +7,7 @@ const authService = require("../services/auth.services");
 
 
 router.route('/api/contact')
-    .get(contact.index)
+    .get(authService.authJwt, contact.index)
     .post(authService.authJwt, validate(contactValidation.createContact), contact.create)
     .put(contact.update)
     .delete(contact.destroy)

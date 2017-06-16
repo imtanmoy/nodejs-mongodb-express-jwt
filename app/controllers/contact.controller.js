@@ -2,10 +2,13 @@
 
 const HTTPStatus = require("http-status");
 const Contact = require("./../models/contact.model");
+const AuthService = require('../services/auth.services');
+
 
 exports.index = async(req, res) => {
+    let user = AuthService.authUser(req.headers);
     try {
-        const allContacts = await Contact.find().populate("user");
+        const allContacts = await Contact.find({ 'user': user._id }).sort('-createdAt').populate("user", 'firstName lastName email phone');
         return res.status(HTTPStatus.OK).jsonp(allContacts);
     } catch (error) {
         next(error);
@@ -18,7 +21,10 @@ exports.list = async(req, res) => {
     const skip = parseInt(req.params.skip, 0);
     console.log(req.params);
     try {
-        const contactList = await Contact.list({ limit, skip });
+        const contactList = await Contact.list({
+            limit,
+            skip
+        });
         return res.status(HTTPStatus.OK).json(contactList);
     } catch (error) {
         next(error);
