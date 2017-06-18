@@ -43,6 +43,8 @@ const jwtStrategy = new JwtStrategy(jwtOpts, async(payload, done) => {
             return done(null, false);
         }
 
+
+
         return done(null, user);
     } catch (e) {
         return done(e, false);
@@ -61,21 +63,21 @@ exports.authJwt = authJwt;
 
 
 // get authenticated user from jwt token
-const getToken = (headers) => {
-    if (headers && headers.authorization) {
-        var parted = headers.authorization.split(" ");
-        if (parted.length === 2) {
-            return parted[1];
-        } else {
-            return null;
-        }
-    } else {
-        return null;
-    }
-};
+// const getToken = (headers) => {
+//     if (headers && headers.authorization) {
+//         var parted = headers.authorization.split(" ");
+//         if (parted.length === 2) {
+//             return parted[1];
+//         } else {
+//             return null;
+//         }
+//     } else {
+//         return null;
+//     }
+// };
 
-exports.authUser = headers => {
-    let token = getToken(headers);
-    let decoded = jwt.decode(token, secreateKey);
-    return decoded;
-};
+// exports.authUser = headers => {
+//     let token = getToken(headers);
+//     let decoded = jwt.decode(token, secreateKey);
+//     return decoded;
+// };

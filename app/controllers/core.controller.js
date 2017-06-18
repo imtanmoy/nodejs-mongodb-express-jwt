@@ -6,8 +6,8 @@ const AuthService = require('../services/auth.services');
 
 exports.index = async(req, res, next) => {
 
-    let user = AuthService.authUser(req.headers);
-    console.log(user)
+    // let user = AuthService.authUser(req.headers);
+    // console.log(req.user._id)
 
     try {
         const allContacts = await Contact.list()
