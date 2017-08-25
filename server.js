@@ -5,6 +5,7 @@ const app = express()
 const path = require("path")
 const morgan = require("morgan")
 const bodyParser = require("body-parser")
+const chalk = require('chalk')
 require('./config/database')
 const middlewaresConfig = require("./config/middlewares")
 const routes = require("./app/routes/index")
@@ -42,6 +43,6 @@ app.listen(PORT, err => {
     if (err) {
         throw err
     } else {
-        console.log(`Server is running on port ${PORT}!`)
+        console.log(`Server is running on port ${PORT}!`, chalk.green('✓'))
     }
 })
